@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody playerRigidbody;
     // 이동속력
     public float speed = 3f;
-
+    //내 자신을 담을 변수
     public GameObject my; 
 
     private void start()
@@ -24,13 +24,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //게임 오브젝트에서 Rigidbody 컴포넌트를 찾아
+        // playerRigidbody에 할당
         float xInput = Input.GetAxis("Horizontal");
-        // 키보드 : 'A' < - : 음의 방향 : 최대 -1.0f
-        //키보드 : 'D' -> : 양의 방향 :  +1.0f
         float zInput = Input.GetAxis("Vertical");
-        //키보드 : 'W',^ : 양의방향 : +1.0f
-        //키보드 : 'S', ▼ : 음의방향 : -1.0f
-    
+
+        //실제 이동 속도를 입력값과 이동 속력을 사용해 결정
+        //수평축에 수직축의 입력값을 감지해서 저장
+        float xSpeed = xInput * speed;
+        //키보드 : 'A', <- : 음의 방향 : -1.0f
+        float zSpeed = zInput * speed;
+       
+        //vector3속도를 (xspeed, 0f, zspeed) 생성
+        Vector3 newVelocity = new Vector3(xSpeed, 0, zSpeed);
+        //rigidbody의 속도에  newVelocity 할당
+        playerRigidbody.velocity = newVelocity;
     }
 
  
@@ -57,9 +65,9 @@ public class PlayerController : MonoBehaviour
                 playerRigidbody.AddForce(0f, 0f, -speed);
             }
         }
-   
-   
-    void Die()
+
+
+    public void die()
     {
         my.SetActive(false);
         
